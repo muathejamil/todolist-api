@@ -1,12 +1,16 @@
 package main
 
 import (
-    "net/http"
+	"net/http"
+	"todolist-api/handlers"
 )
 
+func init() {
 
+}
 func main() {
-    mux := http.ServeMux()
-	mux.Handle("/todos/", &TodosHandler)
+	mux := http.NewServeMux()
+	mux.Handle("/todos/", &handlers.TodosHandler{})
+	mux.Handle("/todos", &handlers.TodosHandler{})
 	http.ListenAndServe("localhost:8000", mux)
 }
