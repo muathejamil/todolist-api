@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	resources.LoadEnvVariables()
+	//resources.LoadEnvVariables()
 	resources.ConnectToDb()
 }
 
