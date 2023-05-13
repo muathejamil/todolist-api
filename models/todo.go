@@ -12,7 +12,7 @@ type Todo struct {
 	DueDay      *time.Time `json:"DueDay"`
 }
 
-func NewTodo(title string, description string, dueDate *time.Time) Todo {
+func NewTodo(id uint, title string, description string, dueDate *time.Time) Todo {
 	return Todo{
 		Title:       title,
 		Description: description,

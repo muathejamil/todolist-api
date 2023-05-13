@@ -2,14 +2,14 @@ package migrate
 
 import (
 	"todolist-api/models"
-	"todolist-api/resources"
+	"todolist-api/storage"
 )
 
 func init() {
 	//resources.LoadEnvVariables()
-	resources.ConnectToDb()
+	storage.ConnectToDb()
 }
 
 func main() {
-	resources.DB.AutoMigrate(&models.Todo{})
+	storage.DB.AutoMigrate(&models.Todo{})
 }
