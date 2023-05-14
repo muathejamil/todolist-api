@@ -9,13 +9,14 @@ import (
 	"todolist-api/contracts"
 )
 
+// Cache cache struct.
 type Cache struct {
 	host    string
 	db      int
 	expires time.Duration
 }
 
-// NewRedisCache create new redis cache
+// NewRedisCache create new redis cache.
 func NewRedisCache(host string, db int, exp time.Duration) *Cache {
 	return &Cache{
 		host:    host,
