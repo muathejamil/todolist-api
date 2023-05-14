@@ -24,7 +24,7 @@ func NewRedisCache(host string, db int, exp time.Duration) *Cache {
 	}
 }
 
-// getClient gets new redis client
+// getClient gets new redis client.
 func (cache *Cache) getClient() *redis.Client {
 	return redis.NewClient(&redis.Options{
 		Addr:     cache.host,
