@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 	"regexp"
-	"todolist-api/cache"
+	"todolist-api/cache/redis"
 	"todolist-api/handlers/isrv"
 )
 
@@ -28,7 +28,7 @@ type TodosHandler struct {
 	GetTodo     isrv.TodoGetterSrv
 	GetAllTodos isrv.TodosGetterSrv
 	UpdateTodo  isrv.TodoUpdaterSrv
-	TodoCache   cache.TodoCache
+	TodoCache   redis.TodoCache
 }
 
 // ServeHTTP serve the http requests and redirect them to the desired service.

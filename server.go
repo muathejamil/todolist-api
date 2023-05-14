@@ -2,7 +2,7 @@ package main
 
 import (
 	"net/http"
-	"todolist-api/cache"
+	"todolist-api/cache/redis"
 	"todolist-api/handlers"
 	"todolist-api/repos"
 	"todolist-api/services"
@@ -23,7 +23,7 @@ func InitServer() {
 	}
 
 	// create new redis cache
-	cache := cache.NewRedisCache("localhost:6379", 0, 10)
+	cache := redis.NewRedisCache("localhost:6379", 0, 10)
 	mux := http.NewServeMux()
 	// handle incoming requests.
 	mux.Handle("/api/v1/todos/", &handlers.TodosHandler{
