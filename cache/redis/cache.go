@@ -16,7 +16,7 @@ type Cache struct {
 	expires time.Duration
 }
 
-// NewRedisCache create new redis cache.
+// NewRedisCache creates new redis cache.
 func NewRedisCache(host string, db int, exp time.Duration) *Cache {
 	return &Cache{
 		host:    host,
