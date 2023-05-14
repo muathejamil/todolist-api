@@ -21,7 +21,10 @@ func (t *TodosHandler) Update(writer http.ResponseWriter, request *http.Request)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 		return
 	}
+	// make new todoDto slice.
 	todos := make([]contracts.TodoDTO, 0)
+	// append value to todoDto slice.
 	dtos := append(todos, updatedTodo)
+	// write response as json to writer.
 	utils.WriteJsonTodosResponse(writer, dtos)
 }

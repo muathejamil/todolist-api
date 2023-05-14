@@ -23,7 +23,10 @@ func (t *TodosHandler) Get(writer http.ResponseWriter, request *http.Request) {
 		//store the value in the cache.
 		t.TodoCache.Set(id, todo)
 	}
+	// create new todoDTO slice.
 	todos := make([]contracts.TodoDTO, 0)
+	// append value
 	dtos := append(todos, todo)
+	// write response as to writer.
 	utils.WriteJsonTodosResponse(writer, dtos)
 }

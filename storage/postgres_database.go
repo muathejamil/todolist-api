@@ -13,6 +13,7 @@ var DB *gorm.DB
 // Use sync once
 //https://www.socketloop.com/tutorials/golang-how-to-run-your-code-only-once-with-sync-once-object
 
+// ConnectToDb connects to db.
 func ConnectToDb() {
 	var err error
 	onlyOnce.Do(func() {

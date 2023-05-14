@@ -9,6 +9,7 @@ import (
 	"todolist-api/storage"
 )
 
+// InitServer inits server.
 func InitServer() {
 	todoRepo := repo.TodoRepo{
 		DB: storage.DB,
@@ -21,8 +22,10 @@ func InitServer() {
 		GetAllTodos: &todoRepo,
 	}
 
+	// create new redis cache
 	cache := cache.NewRedisCache("localhost:6379", 0, 10)
 	mux := http.NewServeMux()
+	// handle incoming requests.
 	mux.Handle("/api/v1/todos/", &handlers.TodosHandler{
 		CreateTodo:  &service,
 		DeleteTodo:  &service,
@@ -31,6 +34,7 @@ func InitServer() {
 		UpdateTodo:  &service,
 		TodoCache:   cache,
 	})
+	// handle incoming requests.
 	mux.Handle("/api/v1/todos", &handlers.TodosHandler{
 		CreateTodo:  &service,
 		DeleteTodo:  &service,

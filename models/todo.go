@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// Todo todo struct.
 type Todo struct {
 	gorm.Model
 	Title       string     `json:"Title"`
@@ -12,6 +13,7 @@ type Todo struct {
 	DueDay      *time.Time `json:"DueDay"`
 }
 
+// NewTodo creates new Todo.
 func NewTodo(id uint, title string, description string, dueDate *time.Time) Todo {
 	return Todo{
 		Title:       title,

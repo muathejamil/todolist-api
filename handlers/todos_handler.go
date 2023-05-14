@@ -15,6 +15,7 @@ var (
 	deleteTodoReg  = regexp.MustCompile(`^/api/v1/todos/(\d+)$`)
 )
 
+// TodosHandler todoHandler.
 type TodosHandler struct {
 	CreateTodo  isrv.TodoCreatorSrv
 	DeleteTodo  isrv.TodoDeleterSrv
