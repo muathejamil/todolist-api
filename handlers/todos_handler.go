@@ -16,6 +16,12 @@ var (
 )
 
 // TodosHandler todoHandler.
+// CreateTodo create todo service.
+// DeleteTodo delete todo service.
+// GetTodo get one todo service.
+// GetAllTodos get all todos service.
+// UpdateTodo update todo service.
+// TodoCache todo redis cache.
 type TodosHandler struct {
 	CreateTodo  isrv.TodoCreatorSrv
 	DeleteTodo  isrv.TodoDeleterSrv
