@@ -1,7 +1,7 @@
 package repos
 
 import (
-	"todolist-api/contracts"
+	"todolist-api/handlers/contracts"
 	"todolist-api/models"
 )
 

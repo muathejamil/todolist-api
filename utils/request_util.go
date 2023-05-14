@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"todolist-api/contracts"
+	"todolist-api/handlers/contracts"
 )
 
 // MapRequestToTodo maps the request body to todo struct.

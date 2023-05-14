@@ -1,6 +1,6 @@
 package isrv
 
-import "todolist-api/contracts"
+import "todolist-api/handlers/contracts"
 
 // TodoGetterSrv todo getter service.
 type TodoGetterSrv interface {

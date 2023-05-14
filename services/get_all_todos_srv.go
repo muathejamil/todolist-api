@@ -1,6 +1,6 @@
 package services
 
-import "todolist-api/contracts"
+import "todolist-api/handlers/contracts"
 
 // GetAll get all todos
 // Params

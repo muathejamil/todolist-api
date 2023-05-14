@@ -1,6 +1,6 @@
 package services
 
-import "todolist-api/contracts"
+import "todolist-api/handlers/contracts"
 
 // Create creates a new Todo
 // Params todoDTO contracts.TodoDTO

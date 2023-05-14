@@ -2,7 +2,7 @@ package repos
 
 import (
 	"errors"
-	"todolist-api/contracts"
+	"todolist-api/handlers/contracts"
 	"todolist-api/models"
 )
 

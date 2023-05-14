@@ -6,7 +6,7 @@ import (
 	"github.com/go-redis/redis/v7"
 	"strconv"
 	"time"
-	"todolist-api/contracts"
+	"todolist-api/handlers/contracts"
 )
 
 const Base int = 10
