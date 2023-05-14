@@ -9,15 +9,15 @@ import (
 	"todolist-api/contracts"
 )
 
-type RedisCache struct {
+type Cache struct {
 	host    string
 	db      int
 	expires time.Duration
 }
 
 // NewRedisCache create new redis cache
-func NewRedisCache(host string, db int, exp time.Duration) *RedisCache {
-	return &RedisCache{
+func NewRedisCache(host string, db int, exp time.Duration) *Cache {
+	return &Cache{
 		host:    host,
 		db:      db,
 		expires: exp,
@@ -25,7 +25,7 @@ func NewRedisCache(host string, db int, exp time.Duration) *RedisCache {
 }
 
 // getClient gets new redis client
-func (cache *RedisCache) getClient() *redis.Client {
+func (cache *Cache) getClient() *redis.Client {
 	return redis.NewClient(&redis.Options{
 		Addr:     cache.host,
 		Password: "",
@@ -34,7 +34,7 @@ func (cache *RedisCache) getClient() *redis.Client {
 }
 
 // Set sets the todo to the redis cache.
-func (cache *RedisCache) Set(key uint64, value contracts.TodoDTO) error {
+func (cache *Cache) Set(key uint64, value contracts.TodoDTO) error {
 	client := cache.getClient()
 	json, err := json2.Marshal(value)
 	if err != nil {
@@ -47,7 +47,7 @@ func (cache *RedisCache) Set(key uint64, value contracts.TodoDTO) error {
 }
 
 // Get gets the todo from the redis cache.
-func (cache *RedisCache) Get(key uint64) (contracts.TodoDTO, error) {
+func (cache *Cache) Get(key uint64) (contracts.TodoDTO, error) {
 	client := cache.getClient()
 	formatUint := strconv.FormatUint(key, 10)
 	val, err := client.Get(formatUint).Result()
