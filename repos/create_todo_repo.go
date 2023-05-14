@@ -1,8 +1,8 @@
 package repos
 
 import (
-	"todolist-api/handlers/contracts"
 	"todolist-api/models"
+	"todolist-api/services/contracts"
 )
 
 // CreateTodo creates a new Todo

@@ -2,8 +2,8 @@ package repos
 
 import (
 	"errors"
-	"todolist-api/handlers/contracts"
 	"todolist-api/models"
+	"todolist-api/services/contracts"
 )
 
 // GetTodo gets todo by id

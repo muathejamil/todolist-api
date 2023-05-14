@@ -2,6 +2,7 @@ package contracts
 
 import (
 	"time"
+	"todolist-api/services/contracts"
 )
 
 type TodoDTO struct {
@@ -22,6 +23,6 @@ func NewTodoDTO(id uint, title string, description string, dueDate *time.Time) T
 }
 
 // ToTodoDTO maps todoIdto to TodoDto
-func ToTodoDTO(todo TodoIDTO) TodoDTO {
+func ToTodoDTO(todo contracts.TodoIDTO) TodoDTO {
 	return NewTodoDTO(todo.Id, todo.Title, todo.Description, todo.DueDay)
 }
