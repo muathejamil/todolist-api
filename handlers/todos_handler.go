@@ -28,7 +28,7 @@ type TodosHandler struct {
 	GetTodo     isrv.TodoGetterSrv
 	GetAllTodos isrv.TodosGetterSrv
 	UpdateTodo  isrv.TodoUpdaterSrv
-	TodoCache   redis.TodoCache
+	TodoCache   redis.CacheRedis
 }
 
 // ServeHTTP serve the http requests and redirect them to the desired service.
