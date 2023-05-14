@@ -11,6 +11,7 @@ type TodoDTO struct {
 	DueDay      *time.Time `json:"DueDay"`
 }
 
+// NewTodoDTO creates new todoDto
 func NewTodoDTO(id uint, title string, description string, dueDate *time.Time) TodoDTO {
 	return TodoDTO{
 		Id:          id,
@@ -20,6 +21,7 @@ func NewTodoDTO(id uint, title string, description string, dueDate *time.Time) T
 	}
 }
 
+// ToTodoDTO maps todoIdto to TodoDto
 func ToTodoDTO(todo TodoIDTO) TodoDTO {
 	return NewTodoDTO(todo.Id, todo.Title, todo.Description, todo.DueDay)
 }

@@ -2,11 +2,13 @@ package main
 
 import "todolist-api/storage"
 
+// init inits the connection to db.
 func init() {
 	//resources.LoadEnvVariables()
 	storage.ConnectToDb()
 }
 
+// main project entry point.
 func main() {
 	InitServer()
 }

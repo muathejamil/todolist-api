@@ -15,6 +15,7 @@ type RedisCache struct {
 	expires time.Duration
 }
 
+// NewRedisCache create new redis cache
 func NewRedisCache(host string, db int, exp time.Duration) *RedisCache {
 	return &RedisCache{
 		host:    host,
@@ -23,7 +24,7 @@ func NewRedisCache(host string, db int, exp time.Duration) *RedisCache {
 	}
 }
 
-// getClient get new redis client
+// getClient gets new redis client
 func (cache *RedisCache) getClient() *redis.Client {
 	return redis.NewClient(&redis.Options{
 		Addr:     cache.host,
@@ -41,7 +42,7 @@ func (cache *RedisCache) Set(key uint64, value contracts.TodoDTO) error {
 	}
 	// set value to key, and it will expire in the amount of seconds
 	formatUint := strconv.FormatUint(key, 10)
-	client.Set(formatUint, json, cache.expires*time.Second)
+	client.Set(formatUint, json, cache.expires*time.Minute)
 	return nil
 }
 
