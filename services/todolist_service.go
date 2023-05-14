@@ -1,9 +1,9 @@
 package services
 
 import (
-	"todolist-api/repo"
+	"todolist-api/repos"
 )
 
 type TodoListService struct {
-	Repo repo.TodoRepo
+	Repo repos.TodoRepo
 }

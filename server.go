@@ -4,14 +4,14 @@ import (
 	"net/http"
 	"todolist-api/cache"
 	"todolist-api/handlers"
-	"todolist-api/repo"
+	"todolist-api/repos"
 	"todolist-api/services"
 	"todolist-api/storage"
 )
 
 // InitServer inits server.
 func InitServer() {
-	todoRepo := repo.TodoRepo{
+	todoRepo := repos.TodoRepo{
 		DB: storage.DB,
 	}
 	service := services.Service{
