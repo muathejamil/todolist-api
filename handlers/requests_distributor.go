@@ -41,6 +41,8 @@ func (t *TodosHandler) ServeHTTP(writer http.ResponseWriter, request *http.Reque
 		// map to dto request idto.
 		idto := contracts.ToTodoIDTO(dto)
 		t.CreateTodo.Create(idto)
+		// Get the value from handle method.
+		// write the response to the writer.
 		return
 	case request.Method == http.MethodGet && getAllTodosReg.MatchString(path):
 		t.GetAllTodos.GetAll()
