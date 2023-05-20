@@ -1,6 +1,7 @@
 package contracts
 
 import (
+	"google.golang.org/protobuf/reflect/protoreflect"
 	"time"
 	"todolist-api/services/contracts"
 )
@@ -10,6 +11,11 @@ type TodoDTO struct {
 	Title       string     `json:"Title"`
 	Description string     `json:"Description"`
 	DueDay      *time.Time `json:"DueDay"`
+}
+
+func (t TodoDTO) ProtoReflect() protoreflect.Message {
+	//TODO implement me
+	panic("implement me")
 }
 
 // NewTodoDTO creates new todoDto
