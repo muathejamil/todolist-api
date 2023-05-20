@@ -5,7 +5,9 @@ import (
 	"time"
 	"todolist-api/cache/redis"
 	"todolist-api/handlers"
+	"todolist-api/repos"
 	"todolist-api/services"
+	"todolist-api/storage"
 )
 
 const ExpireAfter time.Duration = 10
@@ -13,10 +15,10 @@ const ExpireAfter time.Duration = 10
 // InitServer inits server.
 func InitServer() {
 	// get DB connection.
-	//connection := storage.GetDBConnection()
-	//todoRepo := repos.TodoRepo{
-	//	DB: connection,
-	//}
+	connection := storage.GetDBConnection()
+	_ = repos.TodoRepo{
+		DB: connection,
+	}
 
 	// create new redis cache
 	cache := redis.NewRedisCache("localhost:6379", 0, ExpireAfter)
@@ -30,7 +32,9 @@ func InitServer() {
 	getterSrv := services.AllGetter{}
 	updaterSrv := services.Updater{}
 
+	// new serve mux.
 	mux := http.NewServeMux()
+
 	// handle incoming requests.
 	mux.Handle("/api/v1/todos/", &handlers.TodosHandler{
 		CreateTodo:  &creatorSrv,
