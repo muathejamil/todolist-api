@@ -9,16 +9,12 @@ import (
 	"todolist-api/handlers/contracts"
 )
 
-// MapRequestToTodo maps the request body to todo struct.
+// MapRequestToTodoDto maps the request body to todo struct.
 // Params writer http.ResponseWriter, request *http.Request.
 // Returns body, false.
-func MapRequestToTodo(writer http.ResponseWriter, request *http.Request) (struct {
-	Title       string
-	Description string
-	StartDay    *time.Time
-	DueDay      *time.Time
-}, bool) {
+func MapRequestToTodoDto(writer http.ResponseWriter, request *http.Request) (contracts.TodoDTO, bool) {
 	var body struct {
+		Id          uint
 		Title       string
 		Description string
 		StartDay    *time.Time
@@ -27,14 +23,10 @@ func MapRequestToTodo(writer http.ResponseWriter, request *http.Request) (struct
 	err := json.NewDecoder(request.Body).Decode(&body)
 	if err != nil {
 		http.Error(writer, err.Error(), http.StatusBadRequest)
-		return struct {
-			Title       string
-			Description string
-			StartDay    *time.Time
-			DueDay      *time.Time
-		}{}, true
+		return contracts.TodoDTO{}, true
 	}
-	return body, false
+	dto := contracts.NewTodoDTO(body.Id, body.Title, body.Description, body.DueDay)
+	return dto, false
 }
 
 // WriteJsonTodosResponse writes the response to the response body.

@@ -1,14 +1,29 @@
 package services
 
-import "todolist-api/handlers/contracts"
+import (
+	"todolist-api/cache/redis"
+	"todolist-api/models"
+	"todolist-api/services/contracts"
+)
+
+// TodoGetter gets todo interface.
+type TodoGetter interface {
+	GetTodo(id uint) (models.Todo, error)
+}
+
+// Getter gets todo struct.
+type Getter struct {
+	repo      TodoGetter
+	TodoCache redis.CacheRedis
+}
 
 // Get gets todo by id
 // Params id uint
 // returns contracts.TodoIDTO, error
-func (s *Service) Get(id uint) (contracts.TodoDTO, error) {
-	todoIDTO, err := s.GetTodo.GetTodo(id)
+func (g *Getter) Get(id uint) (contracts.TodoIDTO, error) {
+	todo, err := g.repo.GetTodo(id)
 	if err != nil {
-		return contracts.TodoDTO{}, err
+		return contracts.TodoIDTO{}, err
 	}
-	return contracts.ToTodoDTO(todoIDTO), nil
+	return contracts.ToIDTO(todo), nil
 }

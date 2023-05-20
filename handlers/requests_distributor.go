@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 	"regexp"
-	"todolist-api/cache/redis"
-	"todolist-api/handlers/isrv"
+	"todolist-api/services/contracts"
+	"todolist-api/utils"
 )
 
 var (
@@ -23,12 +23,11 @@ var (
 // UpdateTodo update todo service.
 // TodoCache todo redis cache.
 type TodosHandler struct {
-	CreateTodo  isrv.TodoCreatorSrv
-	DeleteTodo  isrv.TodoDeleterSrv
-	GetTodo     isrv.TodoGetterSrv
-	GetAllTodos isrv.TodosGetterSrv
-	UpdateTodo  isrv.TodoUpdaterSrv
-	TodoCache   redis.CacheRedis
+	CreateTodo  TodoCreatorSrv
+	DeleteTodo  TodoDeleterSrv
+	GetTodo     TodoGetterSrv
+	GetAllTodos TodosGetterSrv
+	UpdateTodo  TodoUpdaterSrv
 }
 
 // ServeHTTP serve the http requests and redirect them to the desired service.
@@ -37,19 +36,28 @@ func (t *TodosHandler) ServeHTTP(writer http.ResponseWriter, request *http.Reque
 	path := request.URL.Path
 	switch {
 	case request.Method == http.MethodPost && createTodoReg.MatchString(path):
-		t.Create(writer, request)
+		// extracts the todo body form request.
+		dto, _ := utils.MapRequestToTodoDto(writer, request)
+		// map to dto request idto.
+		idto := contracts.ToTodoIDTO(dto)
+		t.CreateTodo.Create(idto)
 		return
 	case request.Method == http.MethodGet && getAllTodosReg.MatchString(path):
-		t.GetAll(writer, request)
+		t.GetAllTodos.GetAll()
 		return
 	case request.Method == http.MethodGet && getTodoReg.MatchString(path):
-		t.Get(writer, request)
+		id := utils.ExtractIdFromURL(writer, request)
+		t.GetTodo.Get(uint(id))
 		return
 	case request.Method == http.MethodPut && updateTodoReg.MatchString(path):
-		t.Update(writer, request)
+		dto, _ := utils.MapRequestToTodoDto(writer, request)
+		idto := contracts.ToTodoIDTO(dto)
+		id := utils.ExtractIdFromURL(writer, request)
+		t.UpdateTodo.Update(uint(id), idto)
 		return
 	case request.Method == http.MethodDelete && deleteTodoReg.MatchString(path):
-		t.Delete(writer, request)
+		id := utils.ExtractIdFromURL(writer, request)
+		t.DeleteTodo.Delete(uint(id))
 		return
 	default:
 		NotFound(writer, request)

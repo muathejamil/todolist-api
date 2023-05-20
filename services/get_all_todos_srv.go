@@ -1,18 +1,31 @@
 package services
 
-import "todolist-api/handlers/contracts"
+import (
+	"todolist-api/models"
+	"todolist-api/services/contracts"
+)
+
+// TodosGetter gets all todos interface.
+type TodosGetter interface {
+	GetAllTodos() ([]models.Todo, error)
+}
+
+// AllGetter gets all todos struct.
+type AllGetter struct {
+	repo TodosGetter
+}
 
 // GetAll get all todos
 // Params
 // returns slice of contracts.TodoDTO
-func (s *Service) GetAll() ([]contracts.TodoDTO, error) {
-	todoIDTOS, err := s.GetAllTodos.GetAllTodos()
+func (g *AllGetter) GetAll() ([]contracts.TodoIDTO, error) {
+	todoIDTOS, err := g.repo.GetAllTodos()
 	if err != nil {
 		return nil, err
 	}
-	todoDTOs := make([]contracts.TodoDTO, len(todoIDTOS))
+	todoIDTOs := make([]contracts.TodoIDTO, len(todoIDTOS))
 	for i, todo := range todoIDTOS {
-		todoDTOs[i] = contracts.ToTodoDTO(todo)
+		todoIDTOs[i] = contracts.ToIDTO(todo)
 	}
-	return todoDTOs, nil
+	return todoIDTOs, nil
 }

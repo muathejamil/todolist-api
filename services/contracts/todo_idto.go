@@ -2,6 +2,7 @@ package contracts
 
 import (
 	"time"
+	"todolist-api/handlers/contracts"
 	"todolist-api/models"
 )
 
@@ -25,13 +26,13 @@ func NewTodoIDTO(id uint, title string, description string, dueDate *time.Time) 
 // ToTodoIDTO Map from Todo model to TodoIDTO
 // params todo type models.Todo
 // returns TodoIDTO
-func ToTodoIDTO(todo models.Todo) TodoIDTO {
-	return NewTodoIDTO(todo.ID, todo.Title, todo.Description, todo.DueDay)
+func ToTodoIDTO(todo contracts.TodoDTO) TodoIDTO {
+	return NewTodoIDTO(todo.Id, todo.Title, todo.Description, todo.DueDay)
 }
 
-// ToTodo Map from TodoIDTO to Todo model
+// ToIDTO Map from TodoIDTO to Todo model
 // params todo type TodoIDTO
-// returns models.Todo
-func ToTodo(todo TodoIDTO) models.Todo {
-	return models.NewTodo(todo.Id, todo.Title, todo.Description, todo.DueDay)
+// returns TodoIDTO
+func ToIDTO(todo models.Todo) TodoIDTO {
+	return NewTodoIDTO(todo.ID, todo.Title, todo.Description, todo.DueDay)
 }

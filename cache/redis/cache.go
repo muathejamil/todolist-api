@@ -1,9 +1,9 @@
 package redis
 
 import (
-	json2 "encoding/json"
 	"errors"
 	"github.com/go-redis/redis/v7"
+	"google.golang.org/protobuf/proto"
 	"strconv"
 	"time"
 	"todolist-api/handlers/contracts"
@@ -41,7 +41,7 @@ func (cache *Cache) Set(key uint64, value contracts.TodoDTO) error {
 	// get cache client.
 	client := cache.getClient()
 	// marshaling the value.
-	json, err := json2.Marshal(value)
+	bytes, err := proto.Marshal(&value)
 	// handle error if exist when marshaling.
 	if err != nil {
 		return errors.New("unable to set todo to cache")
@@ -49,7 +49,7 @@ func (cache *Cache) Set(key uint64, value contracts.TodoDTO) error {
 	// convert key to string with base.
 	formatUint := strconv.FormatUint(key, Base)
 	// set value to key, and it will expire in the amount of minutes.
-	client.Set(formatUint, json, cache.expires*time.Minute)
+	client.Set(formatUint, bytes, cache.expires*time.Minute)
 	return nil
 }
 
@@ -68,7 +68,7 @@ func (cache *Cache) Get(key uint64) (contracts.TodoDTO, error) {
 	// init new todoDto.
 	todo := contracts.TodoDTO{}
 	// unmarshal value.
-	err = json2.Unmarshal([]byte(val), &todo)
+	err = proto.Unmarshal([]byte(val), &todo)
 	// handle error in un-marshaling if exists.
 	if err != nil {
 		return contracts.TodoDTO{}, errors.New("unable to find todo in cache")

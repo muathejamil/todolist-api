@@ -1,18 +1,28 @@
 package services
 
 import (
-	"todolist-api/handlers/contracts"
-	contracts2 "todolist-api/services/contracts"
+	"todolist-api/models"
+	"todolist-api/services/contracts"
 )
+
+// TodoCreator create todo interface.
+type TodoCreator interface {
+	CreateTodo(todo models.Todo) (models.Todo, error)
+}
+
+// Creator create todo struct.
+type Creator struct {
+	repo TodoCreator
+}
 
 // Create creates a new Todo
 // Params todoDTO contracts.TodoDTO
 // returns contracts.TodoDTO, error
-func (s *Service) Create(todoDTO contracts.TodoDTO) (contracts.TodoDTO, error) {
-	todo := contracts2.NewTodoIDTO(todoDTO.Id, todoDTO.Title, todoDTO.Description, todoDTO.DueDay)
-	todoIDTO, err := s.CreateTodo.CreateTodo(todo)
+func (s *Creator) Create(todoIDTO contracts.TodoIDTO) (contracts.TodoIDTO, error) {
+	dbTodo := models.NewTodo(todoIDTO.Id, todoIDTO.Title, todoIDTO.Description, todoIDTO.DueDay)
+	todo, err := s.repo.CreateTodo(dbTodo)
 	if err != nil {
-		return contracts.TodoDTO{}, err
+		return contracts.TodoIDTO{}, err
 	}
-	return contracts.ToTodoDTO(todoIDTO), nil
+	return contracts.ToIDTO(todo), nil
 }

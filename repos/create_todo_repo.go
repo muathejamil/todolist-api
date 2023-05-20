@@ -2,18 +2,16 @@ package repos
 
 import (
 	"todolist-api/models"
-	"todolist-api/services/contracts"
 )
 
 // CreateTodo creates a new Todo
 // Params todoIDTO contracts.TodoIDTO
 // returns contracts.TodoIDTO, error
-func (t *TodoRepo) CreateTodo(todoIDTO contracts.TodoIDTO) (contracts.TodoIDTO, error) {
+func (t *TodoRepo) CreateTodo(todo models.Todo) (models.Todo, error) {
 	// TODO: ID is our responsibility not DB.
-	todo := models.NewTodo(todoIDTO.Id, todoIDTO.Title, todoIDTO.Description, todoIDTO.DueDay)
 	dbTodo := t.DB.Create(&todo)
 	if dbTodo.Error != nil {
-		return contracts.TodoIDTO{}, dbTodo.Error
+		return models.Todo{}, dbTodo.Error
 	}
-	return contracts.ToTodoIDTO(todo), nil
+	return todo, nil
 }
