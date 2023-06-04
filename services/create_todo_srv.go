@@ -12,7 +12,7 @@ type TodoCreator interface {
 
 // Creator create todo struct.
 type Creator struct {
-	repo TodoCreator
+	Repo TodoCreator
 }
 
 // Create creates a new Todo
@@ -20,7 +20,7 @@ type Creator struct {
 // returns contracts.TodoDTO, error
 func (s *Creator) Create(todoIDTO contracts.TodoIDTO) (contracts.TodoIDTO, error) {
 	dbTodo := models.NewTodo(todoIDTO.Id, todoIDTO.Title, todoIDTO.Description, todoIDTO.DueDay)
-	todo, err := s.repo.CreateTodo(dbTodo)
+	todo, err := s.Repo.CreateTodo(dbTodo)
 	if err != nil {
 		return contracts.TodoIDTO{}, err
 	}

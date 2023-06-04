@@ -12,14 +12,14 @@ type TodosGetter interface {
 
 // AllGetter gets all todos struct.
 type AllGetter struct {
-	repo TodosGetter
+	Repo TodosGetter
 }
 
 // GetAll get all todos
 // Params
 // returns slice of contracts.TodoDTO
 func (g *AllGetter) GetAll() ([]contracts.TodoIDTO, error) {
-	todoIDTOS, err := g.repo.GetAllTodos()
+	todoIDTOS, err := g.Repo.GetAllTodos()
 	if err != nil {
 		return nil, err
 	}

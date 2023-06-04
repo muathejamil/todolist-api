@@ -1,55 +1,64 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"time"
-	"todolist-api/cache/redis"
+	"todolist-api/config"
 	"todolist-api/handlers"
 	"todolist-api/repos"
 	"todolist-api/services"
+	"todolist-api/services/cache/redis"
 	"todolist-api/storage"
 )
 
 const ExpireAfter time.Duration = 10
 
 // InitServer inits server.
-func InitServer() {
+func InitServer(configuration config.Configuration) {
+
 	// get DB connection.
-	connection := storage.GetDBConnection()
-	_ = repos.TodoRepo{
+	connection := storage.GetDBConnection(configuration.DataBase)
+	repo := repos.TodoRepo{
 		DB: connection,
 	}
 
 	// create new redis cache
-	cache := redis.NewRedisCache("localhost:6379", 0, ExpireAfter)
+	redisHost := fmt.Sprintf("%s:%d", configuration.Redis.Host, configuration.Redis.Port)
+	cache := redis.NewRedisCache(redisHost, configuration.Redis.DBNumber, ExpireAfter)
 
 	// define todo services.
-	creatorSrv := services.Creator{}
-	deleterSrv := services.Deleter{}
+	creatorSrv := services.Creator{
+		Repo: &repo,
+	}
+	deleterSrv := services.Deleter{
+		Repo: &repo,
+	}
 	oneGetterSrv := services.Getter{
+		Repo:      &repo,
 		TodoCache: cache,
 	}
-	getterSrv := services.AllGetter{}
-	updaterSrv := services.Updater{}
+	getterSrv := services.AllGetter{
+		Repo: &repo,
+	}
+	updaterSrv := services.Updater{
+		Repo: &repo,
+	}
 
 	// new serve mux.
 	mux := http.NewServeMux()
 
 	// handle incoming requests.
-	mux.Handle("/api/v1/todos/", &handlers.TodosHandler{
-		CreateTodo:  &creatorSrv,
-		DeleteTodo:  &deleterSrv,
-		GetTodo:     &oneGetterSrv,
-		GetAllTodos: &getterSrv,
-		UpdateTodo:  &updaterSrv,
-	})
-	// handle incoming requests.
 	mux.Handle("/api/v1/todos", &handlers.TodosHandler{
-		CreateTodo:  &creatorSrv,
-		DeleteTodo:  &deleterSrv,
-		GetTodo:     &oneGetterSrv,
-		GetAllTodos: &getterSrv,
-		UpdateTodo:  &updaterSrv,
+		CreateTodoSrv:  &creatorSrv,
+		DeleteTodoSrv:  &deleterSrv,
+		GetTodoSrv:     &oneGetterSrv,
+		GetAllTodosSrv: &getterSrv,
+		UpdateTodoSrv:  &updaterSrv,
 	})
-	http.ListenAndServe("localhost:8000", mux)
+
+	err := http.ListenAndServe(fmt.Sprintf("%s:%d", configuration.Server.Host, configuration.Server.Port), mux)
+	if err != nil {
+		return
+	}
 }

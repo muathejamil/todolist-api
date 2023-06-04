@@ -7,14 +7,14 @@ type TodoDeleter interface {
 
 // Deleter delete todo struct.
 type Deleter struct {
-	repo TodoDeleter
+	Repo TodoDeleter
 }
 
 // Delete delete todo by id
 // Params id uint
 // returns error
 func (d *Deleter) Delete(id uint) error {
-	err := d.repo.DeleteTodo(id)
+	err := d.Repo.DeleteTodo(id)
 	if err != nil {
 		return err
 	}

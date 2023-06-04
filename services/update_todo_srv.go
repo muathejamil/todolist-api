@@ -12,7 +12,7 @@ type TodoUpdater interface {
 
 // Updater update todo struct
 type Updater struct {
-	repo TodoUpdater
+	Repo TodoUpdater
 }
 
 // Update update todos
@@ -20,7 +20,7 @@ type Updater struct {
 // Returns updated contracts.TodoDTO, error
 func (u *Updater) Update(id uint, todoIDTO contracts.TodoIDTO) (contracts.TodoIDTO, error) {
 	dbTodo := models.NewTodo(todoIDTO.Id, todoIDTO.Title, todoIDTO.Description, todoIDTO.DueDay)
-	todo, err := u.repo.UpdateTodo(id, dbTodo)
+	todo, err := u.Repo.UpdateTodo(id, dbTodo)
 	if err != nil {
 		return contracts.TodoIDTO{}, err
 	}

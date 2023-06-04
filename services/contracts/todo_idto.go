@@ -2,7 +2,7 @@ package contracts
 
 import (
 	"time"
-	"todolist-api/handlers/contracts"
+	"todolist-api/contracts"
 	"todolist-api/models"
 )
 

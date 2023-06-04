@@ -1,8 +1,8 @@
 package services
 
 import (
-	"todolist-api/cache/redis"
 	"todolist-api/models"
+	"todolist-api/services/cache/redis"
 	"todolist-api/services/contracts"
 )
 
@@ -13,7 +13,7 @@ type TodoGetter interface {
 
 // Getter gets todo struct.
 type Getter struct {
-	repo      TodoGetter
+	Repo      TodoGetter
 	TodoCache redis.CacheRedis
 }
 
@@ -21,9 +21,16 @@ type Getter struct {
 // Params id uint
 // returns contracts.TodoIDTO, error
 func (g *Getter) Get(id uint) (contracts.TodoIDTO, error) {
-	todo, err := g.repo.GetTodo(id)
+	// Get from cache
+	todo, err := g.TodoCache.Get(uint64(id))
 	if err != nil {
-		return contracts.TodoIDTO{}, err
+		// get from database
+		todo, err = g.Repo.GetTodo(id)
+		if err != nil {
+			return contracts.TodoIDTO{}, err
+		}
+		// set value to database
+		g.TodoCache.Set(uint64(todo.ID), todo)
 	}
 	return contracts.ToIDTO(todo), nil
 }

@@ -4,9 +4,11 @@ import (
 	"errors"
 	"github.com/go-redis/redis/v7"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"strconv"
 	"time"
-	"todolist-api/handlers/contracts"
+	"todolist-api/contracts/generated"
+	"todolist-api/models"
 )
 
 const Base int = 10
@@ -37,11 +39,17 @@ func (cache *Cache) getClient() *redis.Client {
 }
 
 // Set sets the todo to the redis cache.
-func (cache *Cache) Set(key uint64, value contracts.TodoDTO) error {
+func (cache *Cache) Set(key uint64, value models.Todo) error {
 	// get cache client.
 	client := cache.getClient()
 	// marshaling the value.
-	bytes, err := proto.Marshal(&value)
+	generatedDto := generated.TodoDTO{
+		Id:          uint32(value.ID),
+		Title:       value.Title,
+		Description: value.Description,
+		DueDay:      nil,
+	}
+	bytes, err := proto.Marshal(&generatedDto)
 	// handle error if exist when marshaling.
 	if err != nil {
 		return errors.New("unable to set todo to cache")
@@ -54,7 +62,7 @@ func (cache *Cache) Set(key uint64, value contracts.TodoDTO) error {
 }
 
 // Get gets the todo from the redis cache.
-func (cache *Cache) Get(key uint64) (contracts.TodoDTO, error) {
+func (cache *Cache) Get(key uint64) (models.Todo, error) {
 	// get cache client.
 	client := cache.getClient()
 	// converts key to string.
@@ -63,15 +71,25 @@ func (cache *Cache) Get(key uint64) (contracts.TodoDTO, error) {
 	val, err := client.Get(formatUint).Result()
 	// handle error if exists.
 	if err != nil {
-		return contracts.TodoDTO{}, errors.New("unable to find todo in cache")
+		return models.Todo{}, errors.New("unable to find todo in cache")
 	}
 	// init new todoDto.
-	todo := contracts.TodoDTO{}
+	generatedDto := generated.TodoDTO{}
 	// unmarshal value.
-	err = proto.Unmarshal([]byte(val), &todo)
+	err = proto.Unmarshal([]byte(val), &generatedDto)
 	// handle error in un-marshaling if exists.
 	if err != nil {
-		return contracts.TodoDTO{}, errors.New("unable to find todo in cache")
+		return models.Todo{}, errors.New("unable to find todo in cache")
 	}
-	return todo, nil
+	result := models.NewTodo(uint(generatedDto.Id), generatedDto.Title, generatedDto.Description, ConvertTimestampToTime(generatedDto.DueDay))
+	return result, nil
+}
+
+// ConvertTimestampToTime converts *timestamppb.Timestamp to *time.Time
+func ConvertTimestampToTime(timestamp *timestamppb.Timestamp) *time.Time {
+	if timestamp == nil {
+		return nil
+	}
+	t := timestamp.AsTime()
+	return &t
 }

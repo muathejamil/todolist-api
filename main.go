@@ -1,10 +1,16 @@
 package main
 
-// init inits the connection to db.
+import (
+	"fmt"
+	"todolist-api/config"
+)
 
 // main project entry point.
 func main() {
-	InitServer()
+	configuration, err := config.GetConfiguration()
+	if err != nil {
+		fmt.Println("error with getting configuration")
+		return
+	}
+	InitServer(configuration)
 }
-
-//How to change line 20, 21 https://github.com/golang/go/issues/29261

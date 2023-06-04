@@ -1,0 +1,21 @@
+{
+  "DataBase":{
+    "HOST": "drona.db.elephantsql.com",
+    "USERNAME": "nboreafj",
+    "PASSWORD": "Cv6qr6J6Fml74tgt7fib3qVkp5Z-zzDC",
+    "NAME": "nboreafj",
+    "PORT": 5432,
+    "SSL": "disable"
+  },
+  "REDIS": {
+    "HOST": "localhost",
+    "PORT": 6379,
+    "DB_NUMBER": 0
+  },
+  "Server": {
+    "HOST": "localhost",
+    "PORT": 8000
+  }
+}
+
+
