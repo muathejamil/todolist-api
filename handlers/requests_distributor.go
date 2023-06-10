@@ -119,7 +119,7 @@ func (t *TodosHandler) CreateTodoHandler(writer http.ResponseWriter, request *ht
 // HandleGetAll handles get all todos.
 // Params writer http.ResponseWriter, request *http.Request.
 // Returns slice of todos.
-func (t *TodosHandler) HandleGetAll(_ http.ResponseWriter, _ *http.Request) ([]commonContracts.TodoDTO, error) {
+func (t *TodosHandler) HandleGetAll(writer http.ResponseWriter, _ *http.Request) ([]commonContracts.TodoDTO, error) {
 	todos, err := t.GetAllTodosSrv.GetAll()
 	if err != nil {
 		return nil, errors.New("unable to fetch todos from db")
@@ -128,6 +128,7 @@ func (t *TodosHandler) HandleGetAll(_ http.ResponseWriter, _ *http.Request) ([]c
 	for i, todo := range todos {
 		todoDTOs[i] = common.ToTodoDTO(todo)
 	}
+	utils.WriteJsonTodosResponse(writer, todoDTOs)
 	return todoDTOs, nil
 }
 
@@ -144,6 +145,7 @@ func (t *TodosHandler) HandleGetOne(writer http.ResponseWriter, request *http.Re
 	}
 	// convert to todo dto
 	todoDTO := common.ToTodoDTO(todoIdto)
+	utils.WriteJsonTodosResponse(writer, []commonContracts.TodoDTO{todoDTO})
 	return todoDTO, nil
 }
 
@@ -162,6 +164,7 @@ func (t *TodosHandler) HandleUpdate(writer http.ResponseWriter, request *http.Re
 	if err != nil {
 		return commonContracts.TodoDTO{}, errors.New("unable to update todo")
 	}
+	utils.WriteJsonTodosResponse(writer, []commonContracts.TodoDTO{common.ToTodoDTO(update)})
 	return common.ToTodoDTO(update), nil
 }
 
